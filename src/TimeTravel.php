@@ -19,23 +19,14 @@ class TimeTravel
     public $end;
 
     /**
-     * interval of jump in time
-     *
-     * @var
-     */
-    public $interval;
-
-
-    /**
      * TimeTravel constructor.
      * @param $start
      * @param $end
      * @throws \Exception
      */
-    public function __construct($start, $end)
+    public function __construct($start)
     {
         $this->start= new \DateTime($start);
-        $this->end = new \DateTime($end);
     }
 
     /**
@@ -50,5 +41,11 @@ class TimeTravel
         return $dateDiff;
     }
 
+    public function findDate(\DateInterval $interval)
+    {
+        $date = $this->start->sub($interval);
+
+        return $date;
+    }
 
 }
