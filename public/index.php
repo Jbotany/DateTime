@@ -1,22 +1,32 @@
 <?php
 
-//require 'vendor/autoload.php';
 require '../src/TimeTravel.php';
 
 use App\TimeTravel;
 
 $start = '1985-12-31';
-$end = '1990-12-31';
-$interval = new DateInterval('PT1000000S');
-
-
 $timeTravel = new TimeTravel($start);
 
+$interval = new DateInterval('PT1000000000S');
+$date = $timeTravel->findDate($interval, '-');
+$timeTravel->end = $date;
+echo 'date in past : ' . $timeTravel->end->format('Y-m-d');
 
-$date = $timeTravel->findDate($interval);
+echo "<br>";
 
-echo 'date in past : ' . $date->format('Y-m-d');
+echo $timeDiff = $timeTravel->getTravelInfo();
 
 
+echo "<br>";
+
+$jumpInTime = new DateInterval('P1M8D');
+$step = new DatePeriod($timeTravel->end, $jumpInTime, $timeTravel->getStart());
+$datesToFuture = $timeTravel->backToFutureStepByStep($step);
+echo "Dates step by step :";
+echo "<br>";
+foreach ($datesToFuture as $dateStep) {
+    echo $dateStep;
+    echo "<br>";
+}
 
 

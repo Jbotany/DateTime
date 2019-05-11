@@ -9,7 +9,7 @@ class TimeTravel
      *
      * @var
      */
-    public $start;
+    private $start;
 
     /**
      * end of time travel
@@ -17,6 +17,22 @@ class TimeTravel
      * @var
      */
     public $end;
+
+    /**
+     * @param mixed $start
+     */
+    public function setStart($start): void
+    {
+        $this->start = $start;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStart()
+    {
+        return $this->start;
+    }
 
     /**
      * TimeTravel constructor.
@@ -37,15 +53,36 @@ class TimeTravel
     public function getTravelInfo()
     {
         $dateDiff = $this->start->diff($this->end);
-
-        return $dateDiff;
+        return $dateDiff->format('Il y a %Y années %m mois %d jours %H heures %i minutes %s seconds');;
     }
 
-    public function findDate(\DateInterval $interval)
+    /**
+     * @param \DateInterval $interval
+     * @param string $type
+     * @return \DateTime
+     */
+    public function findDate(\DateInterval $interval, string $type)
     {
-        $date = $this->start->sub($interval);
+        $end = clone $this->getStart();
+        if ($type === '-') {
+            $end->sub($interval);
+        } else {
+            $end->add($interval);
+        }
+        return $end;
+    }
 
-        return $date;
+    /**
+     * @param \DatePeriod $step
+     * @return array
+     */
+    public function backToFutureStepByStep(\DatePeriod $step): array
+    {
+        $dates = [];
+        foreach ($step as $date){
+            $dates[] = $date->format('M d Y A g:i');
+        }
+        return $dates;
     }
 
 }
